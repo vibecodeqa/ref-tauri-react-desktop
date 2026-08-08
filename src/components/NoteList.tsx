@@ -1,10 +1,12 @@
 import type { NoteMeta } from "../ipc/contract";
 
+/** Props for {@link NoteList}. */
 export interface NoteListProps {
   readonly notes: readonly NoteMeta[];
   readonly onOpen: (name: string) => void;
 }
 
+/** The notes currently in the vault, each openable by name. */
 export function NoteList({ notes, onOpen }: NoteListProps) {
   if (notes.length === 0) {
     return <p className="hint">No notes yet.</p>;

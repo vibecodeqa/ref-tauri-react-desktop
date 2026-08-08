@@ -50,6 +50,9 @@ export function toVaultError(cause: unknown): VaultError {
   };
 }
 
+/**
+ * Builds a {@link VaultClient} over an invoker. Tests pass a fake; the app uses Tauri's.
+ */
 export function createVaultClient(
   invoker: Invoker = defaultInvoker,
 ): VaultClient {

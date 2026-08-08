@@ -3,6 +3,7 @@ import type { VaultClient } from "../ipc/client";
 import { createVaultClient, toVaultError } from "../ipc/client";
 import type { Note, NoteMeta, SaveNoteArgs, VaultError } from "../ipc/contract";
 
+/** Every outcome the vault UI can be in. Exhaustive, so the status line cannot drift. */
 export type VaultStatus =
   | { readonly kind: "idle" }
   | { readonly kind: "busy" }
@@ -10,6 +11,7 @@ export type VaultStatus =
   | { readonly kind: "loaded"; readonly name: string }
   | { readonly kind: "error"; readonly error: VaultError };
 
+/** What {@link useNoteVault} hands back to the components. */
 export interface NoteVaultApi {
   readonly notes: readonly NoteMeta[];
   readonly status: VaultStatus;

@@ -44,8 +44,5 @@ export default defineConfig(({ mode }) => {
       sourcemap: !isProduction,
       minify: isProduction ? "oxc" : false,
     },
-    define: {
-      __APP_MODE__: JSON.stringify(mode),
-    },
   };
 });

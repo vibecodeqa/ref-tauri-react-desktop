@@ -10,6 +10,10 @@ export interface NoteVaultProps {
   readonly client?: VaultClient;
 }
 
+/**
+ * Composes the form, status line and list over {@link useNoteVault}. This is the only
+ * component that knows a vault client exists.
+ */
 export function NoteVault({ client }: NoteVaultProps) {
   const { notes, status, saveNote, openNote } = useNoteVault(client);
   const [name, setName] = useState("");

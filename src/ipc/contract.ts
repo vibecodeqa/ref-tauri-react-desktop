@@ -26,6 +26,7 @@ export const NOTE_NAME_PATTERN = /^[a-z0-9][a-z0-9._-]{0,63}$/;
 /** Every command name the frontend is permitted to invoke. */
 export const COMMANDS = ["save_note", "read_note", "list_notes"] as const;
 
+/** The closed set of command names the IPC client will accept. */
 export type CommandName = (typeof COMMANDS)[number];
 
 /** Machine-readable failure codes returned by the Rust command layer. */
@@ -37,27 +38,32 @@ export type VaultErrorCode =
   | "vault_full"
   | "io_error";
 
+/** The error shape `vault::VaultError` serialises into. */
 export interface VaultError {
   readonly code: VaultErrorCode;
   readonly message: string;
 }
 
+/** Everything the UI knows about a stored note without reading its body. */
 export interface NoteMeta {
   readonly name: string;
   readonly bytes: number;
   readonly modifiedMs: number;
 }
 
+/** A stored note and its metadata. */
 export interface Note {
   readonly meta: NoteMeta;
   readonly body: string;
 }
 
+/** Arguments for the `save_note` command. */
 export interface SaveNoteArgs {
   readonly name: string;
   readonly body: string;
 }
 
+/** Arguments for the `read_note` command. */
 export interface ReadNoteArgs {
   readonly name: string;
 }

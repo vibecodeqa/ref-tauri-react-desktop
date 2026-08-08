@@ -2,6 +2,7 @@ import type { FormEvent } from "react";
 import { useId } from "react";
 import { byteLength, MAX_NOTE_BYTES, MAX_NOTE_NAME_LEN } from "../ipc/contract";
 
+/** Props for {@link NoteForm}. */
 export interface NoteFormProps {
   readonly name: string;
   readonly body: string;
@@ -11,6 +12,10 @@ export interface NoteFormProps {
   readonly onSubmit: () => void;
 }
 
+/**
+ * Controlled form for one note. Purely presentational — it neither validates nor
+ * invokes; the parent owns both.
+ */
 export function NoteForm(props: NoteFormProps) {
   const { name, body, busy, onNameChange, onBodyChange, onSubmit } = props;
   const nameId = useId();

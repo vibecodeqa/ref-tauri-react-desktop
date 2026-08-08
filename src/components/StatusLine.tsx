@@ -1,5 +1,6 @@
 import type { VaultStatus } from "../hooks/use-note-vault";
 
+/** Props for {@link StatusLine}. */
 export interface StatusLineProps {
   readonly status: VaultStatus;
 }

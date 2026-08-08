@@ -1,9 +1,6 @@
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  define: {
-    __APP_MODE__: JSON.stringify("test"),
-  },
   test: {
     environment: "jsdom",
     globals: false,
@@ -13,7 +10,7 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json-summary", "lcov"],
       include: ["src/**/*.ts", "src/**/*.tsx", "scripts/**/*.mjs"],
-      exclude: ["src/main.tsx", "src/globals.d.ts"],
+      exclude: ["src/main.tsx"],
       thresholds: {
         lines: 80,
         functions: 80,

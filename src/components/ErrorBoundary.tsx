@@ -1,6 +1,7 @@
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 
+/** Props for {@link ErrorBoundary}. */
 export interface ErrorBoundaryProps {
   readonly children: ReactNode;
   /** Injectable so tests can assert what was reported without touching the console. */
