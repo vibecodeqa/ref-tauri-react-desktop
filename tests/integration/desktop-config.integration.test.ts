@@ -1,13 +1,13 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import type { DesktopConfigInput } from "../scripts/validate-desktop-config.mjs";
+import type { DesktopConfigInput } from "../../scripts/validate-desktop-config.mjs";
 import {
   loadDesktopConfig,
   validateDesktopConfig,
-} from "../scripts/validate-desktop-config.mjs";
+} from "../../scripts/validate-desktop-config.mjs";
 
-const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
 /** A mutable view of the validator's input, so cases can break one thing at a time. */
 interface MutableCapability {
