@@ -33,6 +33,29 @@ here, and nothing else is reachable.
   (`default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`), the custom asset
   protocol is disabled, and prototype freezing is on.
 
+## Dependency update cadence
+
+There is deliberately **no Dependabot configuration**. This project is trunk-based and
+takes no pull requests, so a bot whose only output channel is a pull request has nowhere to
+put its findings.
+
+Third-party GitHub Actions are pinned by commit SHA with the version in a trailing comment,
+so a moved tag cannot change what runs. The cost of pinning is that nothing announces a
+stale pin, so npm, Cargo and Action versions are reviewed by hand — on each release and
+whenever CI reports a deprecated runtime — in a commit that re-runs the whole gate set.
+
+Two honest limitations, recorded rather than glossed over:
+
+- The cadence is manual. That is a real residual risk, not a solved problem.
+- There is no `cargo audit`, `cargo deny`, or npm advisory gate in CI, so an advisory in a
+  transitive dependency will not fail the build. Dependency Hygiene is still a `planned`
+  standard; a fork that ships to users should add an advisory gate before it does.
+
+The compensating control in this template is surface area rather than scanning: the app has
+no `fs`, `shell`, `http`, `process`, `dialog`, `clipboard`, `updater` or `global-shortcut`
+plugin as a Cargo dependency at all, and `scripts/validate-desktop-config.mjs` fails CI if
+one is introduced.
+
 ## Secrets
 
 This template stores no credentials and reads no secret environment variables. Do not put
