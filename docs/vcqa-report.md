@@ -10,8 +10,18 @@ Score: **98/100** (grade **A**)
 | CI run | [Actions run 31281114952](https://github.com/vibecodeqa/ref-tauri-react-desktop/actions/runs/31281114952) — conclusion `success`, 2026-08-08 (UTC) |
 | Stack detected | react / typescript |
 
-The commit above is the exact tree that was scanned. This report file was added in the
-following commit and changes nothing the scanner measures except this document.
+The commit above is the exact tree that was first scanned. This report file was added in
+the following commit, which was then re-scanned to the same score.
+
+### Verification log
+
+| Commit | CI run | Scanner result |
+| --- | --- | --- |
+| [`4099437`](https://github.com/vibecodeqa/ref-tauri-react-desktop/commit/40994372b45990a96eb6440e7ae985136f164685) | [31281114952](https://github.com/vibecodeqa/ref-tauri-react-desktop/actions/runs/31281114952) `success` | 98/100 A |
+| [`96d0081`](https://github.com/vibecodeqa/ref-tauri-react-desktop/commit/96d0081dbe5d06017bbabce4eacf39b2097ffde6) — adds this document | [31281243502](https://github.com/vibecodeqa/ref-tauri-react-desktop/actions/runs/31281243502) `success` | 98/100 A, unchanged |
+
+`96d0081` is the commit the standards catalog should record as `assessedCommit`. Any commit
+after it changes only this verification log.
 
 ## Standards assessed against
 
