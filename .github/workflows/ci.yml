@@ -1,0 +1,117 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Least privilege: nothing in this workflow writes to the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  web:
+    name: Frontend (lint, typecheck, unit tests, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Unit tests
+        run: pnpm test
+      - name: Capability and desktop config validation
+        run: pnpm validate:desktop
+      - name: Preview-mode frontend build
+        run: pnpm build:preview
+      - name: Production frontend build
+        run: pnpm build
+
+  desktop:
+    name: Tauri shell (fmt, clippy, cargo test, package build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Tauri v2 Linux prerequisites, per https://v2.tauri.app/start/prerequisites/
+      - name: Install Linux WebKit/GTK prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            libwebkit2gtk-4.1-dev \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libxdo-dev \
+            libssl-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            patchelf
+
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Rust toolchain
+        run: |
+          rustup toolchain install stable --profile minimal --component rustfmt --component clippy
+          rustup default stable
+          rustc --version
+          cargo --version
+
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          workspaces: src-tauri
+
+      # `tauri_build::build()` in build.rs fails unless `frontendDist` already exists, so
+      # the frontend bundle has to be produced before any cargo command runs.
+      - name: Build frontend for the Tauri shell
+        run: pnpm build
+
+      - name: cargo fmt
+        run: cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+
+      - name: cargo clippy
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --locked -- -D warnings
+
+      - name: cargo test
+        run: cargo test --manifest-path src-tauri/Cargo.toml --locked
+
+      - name: Capability and desktop config validation
+        run: pnpm validate:desktop
+
+      # Package/build check for one CI-supported platform (Linux x86_64).
+      # `--no-bundle` produces the release binary and skips the .deb/.AppImage bundlers:
+      # this is a build check, not a release. Releases are not produced from CI here.
+      - name: Package build check (Linux, no bundle)
+        run: pnpm tauri build --no-bundle --ci
+
+      - name: Record platform artifact evidence
+        run: |
+          echo "## Package build evidence" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          ls -l src-tauri/target/release/ref-tauri-react-desktop >> "$GITHUB_STEP_SUMMARY"
+          file src-tauri/target/release/ref-tauri-react-desktop >> "$GITHUB_STEP_SUMMARY"
+          sha256sum src-tauri/target/release/ref-tauri-react-desktop >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

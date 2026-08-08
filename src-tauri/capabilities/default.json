@@ -1,0 +1,19 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Minimal capability set for the main window: app metadata, events, path helpers and window/webview lifecycle. Deliberately grants no filesystem, shell, process, http, dialog, clipboard, updater or global-shortcut permission — every host effect this app performs goes through the validated `save_note` / `read_note` / `list_notes` commands in src-tauri/src/vault.rs.",
+  "local": true,
+  "windows": ["main"],
+  "permissions": [
+    "core:app:default",
+    "core:event:default",
+    "core:path:default",
+    "core:webview:allow-webview-position",
+    "core:webview:allow-webview-size",
+    "core:window:allow-close",
+    "core:window:allow-minimize",
+    "core:window:allow-set-focus",
+    "core:window:allow-set-title",
+    "core:window:allow-start-dragging"
+  ]
+}

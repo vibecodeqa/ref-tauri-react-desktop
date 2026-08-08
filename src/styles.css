@@ -1,0 +1,58 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  margin: 0 auto;
+  max-width: 44rem;
+  padding: 1.5rem 1rem 3rem;
+}
+
+h1 {
+  font-size: 1.35rem;
+}
+
+.hint {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.error {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+form {
+  display: grid;
+  gap: 0.35rem;
+  margin-block: 1rem;
+}
+
+input,
+textarea {
+  font: inherit;
+  padding: 0.4rem 0.5rem;
+}
+
+button {
+  font: inherit;
+  justify-self: start;
+  padding: 0.4rem 0.9rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  align-items: baseline;
+  display: flex;
+  gap: 0.5rem;
+}
